@@ -1,4 +1,6 @@
+from optparse import Option
 from random import randint
+from typing import Optional
 
 import pygame
 
@@ -78,8 +80,8 @@ class Snake(GameObject):
         body_color: tuple = SNAKE_COLOR,
         length: int = 1,
         direction: tuple[int, int] = RIGHT,
-        next_direction: tuple | None = None,
-        last: list | None = None,
+        next_direction: Optional[tuple] = None,
+        last: Optional[list] = None,
     ) -> None:
         """Метод инициализации"""
         super().__init__([position], body_color)
