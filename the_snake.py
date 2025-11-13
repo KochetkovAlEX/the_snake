@@ -53,23 +53,23 @@ clock = pygame.time.Clock()
 
 
 class GameObject:
-    "Абстрактный класс GameObject"
+    """Абстрактный класс GameObject"""
 
     def __init__(self,
         position=SCREEN_CENTER,
         body_color=BORDER_COLOR
     ) -> None:
-        "Инициализация абстрактного класса GameObject"
+        """Инициализация абстрактного класса GameObject"""
         self.body_color = body_color
         self.position = position
 
     def draw(self) -> None:
-        "Абстрактный метод рисования"
+        """Абстрактный метод рисования"""
         pass
 
 
 class Snake(GameObject):
-    "Класс Snake. Основной игровой объект"
+    """Класс Snake. Основной игровой объект"""
 
     def __init__(
         self,
@@ -80,7 +80,7 @@ class Snake(GameObject):
         next_direction: tuple | None = None,
         last: list | None = None,
     ) -> None:
-        "Метод инициализации"
+        """Метод инициализации"""
         super().__init__([position], body_color)
         self.length = length
         self.direction = direction
@@ -88,7 +88,7 @@ class Snake(GameObject):
         self.last = last
 
     def draw(self) -> None:
-        "Метод для отрисовывания Змейки"
+        """Метод для отрисовывания Змейки"""
         for position in self.positions:
             rect = pygame.Rect(position, (GRID_SIZE, GRID_SIZE))
             pygame.draw.rect(screen, self.body_color, rect)
@@ -105,7 +105,7 @@ class Snake(GameObject):
             pygame.draw.rect(screen, BOARD_BACKGROUND_COLOR, last_rect)
 
     def move(self) -> None:
-        "Метод для передвижения Змейки по полю"
+        """Метод для передвижения Змейки по полю"""
         self.last = self.positions[-1] if self.positions else None
 
         # Обновляем направление
@@ -126,17 +126,17 @@ class Snake(GameObject):
             self.positions.pop()
 
     def update_direction(self) -> None:
-        "Метод, обновляющий направление движения змейки"
+        """Метод, обновляющий направление движения змейки"""
         if self.next_direction:
             self.direction = self.next_direction
             self.next_direction = None
 
     def get_head_position(self) -> list:
-        "Метод, возвращающий позицию головы"
+        """Метод, возвращающий позицию головы"""
         return self.position[0]
 
     def reset(self) -> None:
-        "Метод, сбрасывающий параметры змейки"
+        """Метод, сбрасывающий параметры змейки"""
         self.length = 1
         self.direction = RIGHT
         self.next_direction = None
@@ -144,21 +144,21 @@ class Snake(GameObject):
         self.last = None
 
     def grow(self) -> None:
-        "Метод, увеличивающий длину змейки"
+        """Метод, увеличивающий длину змейки"""
         self.length += 1
 
     def check_self_collision(self) -> bool:
-        "Метод проверки 'самоукуса'"
+        """Метод проверки 'самоукуса'"""
         return self.get_head_position() in self.positions[1:]
 
     @property
     def positions(self) -> list:
-        "Свойство для доступа к позициям сегментов змейки"
+        """Свойство для доступа к позициям сегментов змейки"""
         return self.position
 
 
 class Apple(GameObject):
-    "Класс Apple. Второй игровой объект"
+    """Класс Apple. Второй игровой объект"""
 
     def __init__(
         self, position: list = SCREEN_CENTER, body_color: tuple = APPLE_COLOR
