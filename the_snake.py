@@ -1,4 +1,3 @@
-from optparse import Option
 from random import randint
 from typing import Optional
 
