@@ -53,15 +53,24 @@ clock = pygame.time.Clock()
 
 
 class GameObject:
-    def __init__(self, position=SCREEN_CENTER, body_color=BORDER_COLOR) -> None:
+    "Абстрактный класс GameObject"
+
+    def __init__(self,
+        position=SCREEN_CENTER,
+        body_color=BORDER_COLOR
+    ) -> None:
+        "Инициализация абстрактного класса GameObject"
         self.body_color = body_color
         self.position = position
 
     def draw(self) -> None:
+        "Абстрактный метод рисования"
         pass
 
 
 class Snake(GameObject):
+    "Класс Snake. Основной игровой объект"
+
     def __init__(
         self,
         position: list = SCREEN_CENTER,
@@ -71,6 +80,7 @@ class Snake(GameObject):
         next_direction: tuple | None = None,
         last: list | None = None,
     ) -> None:
+        "Метод инициализации"
         super().__init__([position], body_color)
         self.length = length
         self.direction = direction
@@ -78,6 +88,7 @@ class Snake(GameObject):
         self.last = last
 
     def draw(self) -> None:
+        "Метод для отрисовывания Змейки"
         for position in self.positions:
             rect = pygame.Rect(position, (GRID_SIZE, GRID_SIZE))
             pygame.draw.rect(screen, self.body_color, rect)
@@ -94,6 +105,7 @@ class Snake(GameObject):
             pygame.draw.rect(screen, BOARD_BACKGROUND_COLOR, last_rect)
 
     def move(self) -> None:
+        "Метод для передвижения Змейки по полю"
         self.last = self.positions[-1] if self.positions else None
 
         # Обновляем направление
@@ -124,7 +136,7 @@ class Snake(GameObject):
         return self.position[0]
 
     def reset(self) -> None:
-        """Метод, сбрасывающий параметры змейки"""
+        "Метод, сбрасывающий параметры змейки"
         self.length = 1
         self.direction = RIGHT
         self.next_direction = None
@@ -132,23 +144,26 @@ class Snake(GameObject):
         self.last = None
 
     def grow(self) -> None:
-        """Метод, увеличивающий длину змейки"""
+        "Метод, увеличивающий длину змейки"
         self.length += 1
 
     def check_self_collision(self) -> bool:
-        """Метод проверки 'самоукуса'"""
+        "Метод проверки 'самоукуса'"
         return self.get_head_position() in self.positions[1:]
 
     @property
     def positions(self) -> list:
-        """Свойство для доступа к позициям сегментов змейки"""
+        "Свойство для доступа к позициям сегментов змейки"
         return self.position
 
 
 class Apple(GameObject):
+    "Класс Apple. Второй игровой объект"
+
     def __init__(
         self, position: list = SCREEN_CENTER, body_color: tuple = APPLE_COLOR
     ) -> None:
+        """Метод инициализации"""
         super().__init__(self.randomize_position(), body_color)
 
     def draw(self) -> None:
@@ -160,7 +175,8 @@ class Apple(GameObject):
     def randomize_position(self, snake_positions=None):
         """
         Метод, определяющий случайное положение яблока.
-        snake_positions - все позиции змейки. передается, для предотвращения появления яблока в змее
+        snake_positions - все позиции змейки.
+        передается, для предотвращения появления яблока в змее
         """
         if snake_positions is None:
             snake_positions = []
@@ -199,12 +215,13 @@ def close_game() -> None:
 
 
 def main():
+    """Основная программа"""
     # Инициализация PyGame:
     pygame.init()
     # Тут нужно создать экземпляры классов.
 
     snake = Snake(SCREEN_CENTER, SNAKE_COLOR)
-    apple = Apple(APPLE_COLOR)
+    apple = Apple(SCREEN_CENTER, APPLE_COLOR)
 
     while True:
         clock.tick(SPEED)
